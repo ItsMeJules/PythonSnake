@@ -24,10 +24,10 @@ class Direction(Enum):
 			return Direction.EAST
 
 class SnakePart:
-	dirs = ([0, -1], #NORTH
-		[0, 1], #SOUTH
-		[-1, 0], #WEST
-		[1, 0]) #EAST
+	dirs = ((0, -1), #NORTH
+			(0, 1), #SOUTH
+			(-1, 0), #WEST
+			(1, 0)) #EAST
 			
 	def __init__(self, pos, dir) -> None:
 		self.__pos = pos
@@ -35,6 +35,7 @@ class SnakePart:
 
 	def move(self, dir, grd) -> None:
 		self.setPosition(np.add(self.__pos, dir), grd)
+		self.setDirection(Direction.fromMatrix(dir))
 
 	def setPosition(self, pos, grd) -> None:
 		if pos[0] < 0:
@@ -84,14 +85,11 @@ class Snake:
 		self.__parts.append(newPart)
 
 	def move(self, grd) -> None:
-		for i in range(len(self.__parts) - 1, 0, -1):
-			previousPartDir = self.__parts[i if i == 0 else i - 1].getDirection()
-			self.__parts[i].move(previousPartDir, grd)
-			self.__parts[i].setDirection(Direction.fromMatrix(previousPartDir))
+		for i in range(len(self.__parts) - 1, 0, -1): #moves every part except head
+			self.__parts[i].move(self.__parts[i - 1].getDirection(), grd)
 
-		head = self.getHead()
-		head.setDirection(self.newDir)
-		head.move(head.getDirection(), grd)
+		dir = SnakePart.dirs[self.newDir.value]
+		self.getHead().move(dir, grd)
 
 	def dir(self, dir) -> None:
 		self.newDir = dir
@@ -114,4 +112,3 @@ class SnakeDisplayer:
 		for p in self.__snake.getParts():
 			r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 5, GRID_SQUARE_SIZE - 5))
 			pygame.draw.rect(screen, SNAKE_COLOR, r)
-	
