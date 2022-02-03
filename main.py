@@ -17,18 +17,18 @@ def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
 	sk = Snake(numpy.array([3, 3]), numpy.array([0, 1]), 2)
 	sd = SnakeDisplayer(sk)
-	
+	clock = pygame.time.Clock()
+
+	pygame.display.set_caption("Snake.py")
 	gd.screen.fill(BG_COLOR)
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT: sys.exit()
-
+		clock.tick(10)
 		game_loop(sk, gd)
 		sd.display(gd.screen)
 		pygame.display.flip()
 		gd.clearLastPos(sk)
-
-
 
 if __name__ == "__main__":
 	main()
