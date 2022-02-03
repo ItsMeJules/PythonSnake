@@ -23,6 +23,11 @@ class Direction(Enum):
 		elif np.array_equal(mt, [1, 0]):
 			return Direction.EAST
 
+def display_snake(sk, screen):
+	for p in sk.getParts():
+		r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 5, GRID_SQUARE_SIZE - 5))
+		pygame.draw.rect(screen, SNAKE_COLOR, r)
+			
 class SnakePart:
 	dirs = ((0, -1), #NORTH
 			(0, 1), #SOUTH
@@ -103,12 +108,3 @@ class Snake:
 	def __str__(self) -> str:
 		return f"dirX: {self.__dir[0]} dirY: {self.__dir[1]} \
 			len: {self.len}"
-
-class SnakeDisplayer:
-	def __init__(self, snake) -> None:
-		self.__snake = snake
-
-	def display(self, screen) -> None:
-		for p in self.__snake.getParts():
-			r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 5, GRID_SQUARE_SIZE - 5))
-			pygame.draw.rect(screen, SNAKE_COLOR, r)

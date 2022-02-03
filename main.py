@@ -5,7 +5,7 @@ import numpy
 import pygame
 
 # My imports
-from snake import Snake, SnakeDisplayer, Direction
+from snake import Snake, Direction, display_snake
 from grid import Grid
 from globals import *
 
@@ -14,7 +14,6 @@ pygame.init()
 def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
 	sk = Snake(numpy.array([3, 3]), Direction.EAST, 4)
-	sd = SnakeDisplayer(sk)
 	clock = pygame.time.Clock()
 
 	pygame.display.set_caption("Snake.py")
@@ -38,7 +37,7 @@ def main():
 					sys.exit()
 		clock.tick(10)
 		sk.move(gd)
-		sd.display(gd.screen)
+		display_snake(sk, gd.screen)
 		pygame.display.flip()
 		gd.clearLastPos(sk)
 
