@@ -12,7 +12,7 @@ pygame.init()
 
 def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
-	sk = Snake(numpy.array([3, 3]), numpy.array([0, 1]), 4)
+	sk = Snake(numpy.array([3, 3]), Direction.EAST, 4)
 	sd = SnakeDisplayer(sk)
 	clock = pygame.time.Clock()
 

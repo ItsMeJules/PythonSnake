@@ -70,8 +70,8 @@ class Snake:
 	def __init__(self, pos, dir, len) -> None:
 		self.len = len
 		self.amountAppleAte = 0
-		self.newDir = Direction.SOUTH
-		self.__parts = [SnakePart(pos, dir)]
+		self.newDir = dir
+		self.__parts = [SnakePart(pos, SnakePart.dirs[dir.value])]
 
 		for i in range(1, len):
 			self.grow()
