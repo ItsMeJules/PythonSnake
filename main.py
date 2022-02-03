@@ -4,18 +4,15 @@ import numpy
 import pygame
 
 # My imports
-from snake import Snake, SnakeDisplayer
+from snake import Snake, SnakeDisplayer, Direction
 from grid import Grid
 from globals import *
 
 pygame.init()
 
-def game_loop(sk, gd):
-	sk.move(gd)
-
 def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
-	sk = Snake(numpy.array([3, 3]), numpy.array([0, 1]), 2)
+	sk = Snake(numpy.array([3, 3]), numpy.array([0, 1]), 4)
 	sd = SnakeDisplayer(sk)
 	clock = pygame.time.Clock()
 
@@ -23,9 +20,23 @@ def main():
 	gd.screen.fill(BG_COLOR)
 	while True:
 		for event in pygame.event.get():
-			if event.type == pygame.QUIT: sys.exit()
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				sys.exit()
+			elif event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_UP:
+					sk.dir(Direction.NORTH)
+				elif event.key == pygame.K_DOWN:
+					sk.dir(Direction.SOUTH)
+				elif event.key == pygame.K_LEFT:
+					sk.dir(Direction.WEST)
+				elif event.key == pygame.K_RIGHT:
+					sk.dir(Direction.EAST)
+				elif event.key == pygame.K_ESCAPE
+					pygame.quit()
+					sys.exit()
 		clock.tick(10)
-		game_loop(sk, gd)
+		sk.move(gd)
 		sd.display(gd.screen)
 		pygame.display.flip()
 		gd.clearLastPos(sk)

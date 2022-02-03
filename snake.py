@@ -1,4 +1,5 @@
 from enum import Enum
+from socket import gethostbyaddr
 from typing import Tuple
 import numpy as np
 import pygame
@@ -10,6 +11,17 @@ class Direction(Enum):
 	SOUTH = 1
 	WEST = 2
 	EAST = 3
+
+	@classmethod
+	def fromMatrix(self, mt):
+		if np.array_equal(mt, [0, -1]):
+			return Direction.NORTH
+		elif np.array_equal(mt, [0, 1]):
+			return Direction.SOUTH
+		elif np.array_equal(mt,[-1, 0]):
+			return Direction.WEST
+		elif np.array_equal(mt, [1, 0]):
+			return Direction.EAST
 
 class SnakePart:
 	dirs = ([0, -1], #NORTH
@@ -41,9 +53,10 @@ class SnakePart:
 		return self.__pos
 
 	def setDirection(self, direction) -> bool:
-		if not (-self.__dir[0] != direction[0] and -self.__dir[1] != direction[1]): #opposed directions
+		dir = SnakePart.dirs[direction.value]
+		if not (-self.__dir[0] != dir[0] and -self.__dir[1] != dir[1]): #opposed directions
 			return False
-		self.__dir = SnakePart.dirs[direction]
+		self.__dir = dir
 
 	def getDirection(self, pixels = False) -> np.ndarray:
 		if pixels:
@@ -57,7 +70,9 @@ class Snake:
 	def __init__(self, pos, dir, len) -> None:
 		self.len = len
 		self.amountAppleAte = 0
+		self.newDir = Direction.SOUTH
 		self.__parts = [SnakePart(pos, dir)]
+
 		for i in range(1, len):
 			self.grow()
 
@@ -65,12 +80,21 @@ class Snake:
 		last = self.__parts[-1]
 		newPos = np.add(last.getPosition(), np.negative(last.getDirection()))
 		newPart = SnakePart(newPos, last.getDirection())
+		
 		self.__parts.append(newPart)
 
 	def move(self, grd) -> None:
-		for i in range(len(self.__parts)):
+		for i in range(len(self.__parts) - 1, 0, -1):
 			previousPartDir = self.__parts[i if i == 0 else i - 1].getDirection()
 			self.__parts[i].move(previousPartDir, grd)
+			self.__parts[i].setDirection(Direction.fromMatrix(previousPartDir))
+
+		head = self.getHead()
+		head.setDirection(self.newDir)
+		head.move(head.getDirection(), grd)
+
+	def dir(self, dir) -> None:
+		self.newDir = dir
 
 	def getHead(self) -> SnakePart:
 		return self.__parts[0]
