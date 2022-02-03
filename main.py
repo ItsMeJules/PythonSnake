@@ -3,27 +3,27 @@ from turtle import bgcolor
 import pygame
 
 # My imports
-from snake import *
+from snake import Snake, SnakeDisplayer
 from grid import Grid
 from globals import *
 
 pygame.init()
 
-def game_loop(sk, gd, screen):
-	screen.fill(BG_COLOR)
-	pygame.draw.rect(screen, SNAKE_COLOR, pygame.Rect(gd.getCenter(), (GRID_SQUARE_SIZE, GRID_SQUARE_SIZE)))
+def game_loop(sd, gd):
+	sd.display(gd.screen)
 	pygame.display.flip()
 
 def main():
-	screen = pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE)
+	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
+	sk = Snake([3, 3], [0, 1], 2)
+	sd = SnakeDisplayer(sk)
 
-	gd = Grid()
-	sk = Snake([0, 0], [0, 1], 1)
+	gd.screen.fill(BG_COLOR)
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT: sys.exit()
 
-		game_loop(sk, gd, screen)
+		game_loop(sd, gd)
 
 
 

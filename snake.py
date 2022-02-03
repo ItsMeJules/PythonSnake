@@ -1,8 +1,9 @@
 from enum import Enum
 from typing import Tuple
 import numpy as np
+import pygame
 
-import grid
+from globals import *
 
 class Direction(Enum):
 	NORTH = 0
@@ -10,9 +11,17 @@ class Direction(Enum):
 	WEST = 2
 	EAST = 3
 
-class _SnakePart:
+class SnakePart:
 	def __init__(self, pos) -> None:
-		self.pos = pos
+		self.__pos = pos
+
+	def getPosition(self, pixels = False) -> Tuple[int, int]:
+		if pixels:
+			return np.multiply(self.__pos, GRID_SQUARE_SIZE)
+		return self.__pos
+	
+	def __str__(self) -> str:
+		return f"x: {self.__pos[0]} y: {self.__pos[1]}"
 
 class Snake:
 	dirs = ([0, -1], #NORTH
@@ -25,12 +34,15 @@ class Snake:
 		self.__dir = dir
 		self.len = len
 		self.amountAppleAte = 0
-		self.parts = [_SnakePart(pos)]
+		self.parts = [SnakePart(pos)]
+		for i in range(1, len):
+			self.grow()
 
 	def grow(self) -> None:
-		newPart = _SnakePart(np.add(self.parts[-1], np.negative(self.__dir)))
+		newPos = np.add(self.parts[-1].getPosition(), np.negative(self.__dir))
+		newPart = SnakePart(newPos)
 		self.parts.append(newPart)
-
+	
 	def __isDirectionValid(self, direction) -> bool:
 		return (-self.__dir[0] != direction[0]
 			and -self.__dir[1] != direction[1])
@@ -45,7 +57,9 @@ class Snake:
 		elif pos[1] > grd.height:
 			pos[1] = 0
 
-	def getPosition(self) -> Tuple[int, int]:
+	def getPosition(self, pixels = False) -> Tuple[int, int]:
+		if pixels:
+			return np.multiply(self.__pos, GRID_SQUARE_SIZE)
 		return self.__pos
 	
 	def setDirection(self, direction) -> bool:
@@ -60,3 +74,13 @@ class Snake:
 		return f"posX: {self.pos[0]} posY: {self.pos[1]} \
 			dirX: {self.__dir[0]} dirY: {self.__dir[1]} \
 			len: {self.len}"
+
+class SnakeDisplayer:
+	def __init__(self, snake) -> None:
+		self.__snake = snake
+
+	def display(self, screen) -> None:
+		for p in self.__snake.parts:
+			r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 1, GRID_SQUARE_SIZE - 1))
+			pygame.draw.rect(screen, SNAKE_COLOR, r)
+	
