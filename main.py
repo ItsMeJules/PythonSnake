@@ -1,5 +1,6 @@
 import sys
 from turtle import bgcolor
+import numpy
 import pygame
 
 # My imports
@@ -9,21 +10,23 @@ from globals import *
 
 pygame.init()
 
-def game_loop(sd, gd):
-	sd.display(gd.screen)
-	pygame.display.flip()
+def game_loop(sk, gd):
+	sk.move(gd)
 
 def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
-	sk = Snake([3, 3], [0, 1], 2)
+	sk = Snake(numpy.array([3, 3]), numpy.array([0, 1]), 2)
 	sd = SnakeDisplayer(sk)
-
+	
 	gd.screen.fill(BG_COLOR)
 	while True:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT: sys.exit()
 
-		game_loop(sd, gd)
+		game_loop(sk, gd)
+		sd.display(gd.screen)
+		pygame.display.flip()
+		gd.clearLastPos(sk)
 
 
 

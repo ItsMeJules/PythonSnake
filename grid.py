@@ -15,5 +15,5 @@ class Grid:
 				self.height / 2 * (GRID_SQUARE_SIZE) - offset
 	
 	def clearLastPos(self, sk) -> None:
-		for p in sk.parts:
+		for p in sk.getParts():
 			pygame.draw.rect(self.screen, BG_COLOR, pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE, GRID_SQUARE_SIZE)))
