@@ -112,6 +112,6 @@ class SnakeDisplayer:
 
 	def display(self, screen) -> None:
 		for p in self.__snake.getParts():
-			r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 1, GRID_SQUARE_SIZE - 1))
+			r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 5, GRID_SQUARE_SIZE - 5))
 			pygame.draw.rect(screen, SNAKE_COLOR, r)
 	

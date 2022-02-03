@@ -1,5 +1,4 @@
 import sys
-from turtle import bgcolor
 import numpy
 import pygame
 

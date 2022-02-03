@@ -1,0 +1,10 @@
+window:
+  height: 400
+  width: 1000
+
+entity_size:
+  snake_part: 30
+
+colors:
+  snake: 224, 224, 224
+  background: (185, 24, 100)
