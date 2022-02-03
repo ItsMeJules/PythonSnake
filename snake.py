@@ -1,6 +1,4 @@
 from enum import Enum
-from socket import gethostbyaddr
-from typing import Tuple
 import numpy as np
 import pygame
 
