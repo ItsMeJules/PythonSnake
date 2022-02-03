@@ -32,7 +32,7 @@ def main():
 					sk.dir(Direction.WEST)
 				elif event.key == pygame.K_RIGHT:
 					sk.dir(Direction.EAST)
-				elif event.key == pygame.K_ESCAPE
+				elif event.key == pygame.K_ESCAPE:
 					pygame.quit()
 					sys.exit()
 		clock.tick(10)
