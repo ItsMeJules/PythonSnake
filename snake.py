@@ -32,9 +32,9 @@ def walks_on_itself(sk):
 		if np.array_equal(sk.getParts()[i].getPosition(), sk.getHead().getPosition()):
 			sk.shrink(4)
 			break
-			
+
 class SnakePart:
-	dirs = ((0, -1), #NORTH
+	dirs = ((0, -1),  # NORTH
 			(0, 1), #SOUTH
 			(-1, 0), #WEST
 			(1, 0)) #EAST
