@@ -26,6 +26,11 @@ def display_snake(sk, screen):
 	for p in sk.getParts():
 		r = pygame.Rect(p.getPosition(True), (SNAKE_PART_SIZE - 5, SNAKE_PART_SIZE - 5))
 		pygame.draw.rect(screen, SNAKE_COLOR, r)
+
+def walks_on_itself(sk):
+	for i in range(len(sk.getParts()) - 1, 0, -1):
+		if np.array_equal(sk.getParts()[i].getPosition(), sk.getHead().getPosition()):
+			sk.shrink(4)
 			
 class SnakePart:
 	dirs = ((0, -1), #NORTH
@@ -84,6 +89,9 @@ class Snake:
 		newPart = SnakePart(newPos, last.getDirection())
 		
 		self.__parts.append(newPart)
+
+	def shrink(self, n) -> None:
+		self.__parts = self.__parts[:n]
 
 	def move(self, grd) -> None:
 		for i in range(len(self.__parts) - 1, 0, -1): #moves every part except head

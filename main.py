@@ -45,6 +45,7 @@ def main():
 			sk.grow()
 			clear_apple(apl, gd.screen)
 			apl.spawn(gd)
+		walks_on_itself(sk)
 		display_snake(sk, gd.screen)
 		display_apple(apl, gd.screen)
 		pygame.display.flip()
