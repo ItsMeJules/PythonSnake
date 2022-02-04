@@ -16,7 +16,7 @@ pygame.init()
 
 def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
-	sk = Snake(numpy.array([3, 3]), Direction.EAST, 4)
+	sk = Snake(numpy.array([3, 3]), Direction.EAST, 10, gd)
 	clock = pygame.time.Clock()
 	apl = Apple(gd)
 	random.seed(datetime.now())
@@ -42,7 +42,7 @@ def main():
 					sys.exit()
 		sk.move(gd)
 		if sk.canEat(apl):
-			sk.grow()
+			sk.grow(gd)
 			clear_apple(apl, gd.screen)
 			apl.spawn(gd)
 		walks_on_itself(sk)

@@ -31,6 +31,7 @@ def walks_on_itself(sk):
 	for i in range(len(sk.getParts()) - 1, 0, -1):
 		if np.array_equal(sk.getParts()[i].getPosition(), sk.getHead().getPosition()):
 			sk.shrink(4)
+			break
 			
 class SnakePart:
 	dirs = ((0, -1), #NORTH
@@ -74,20 +75,22 @@ class SnakePart:
 		return f"x: {self.__pos[0]} y: {self.__pos[1]}"
 
 class Snake:
-	def __init__(self, pos, dir, len) -> None:
+	def __init__(self, pos, dir, len, gd) -> None:
 		self.len = len
 		self.amountAppleAte = 0
 		self.newDir = dir
 		self.__parts = [SnakePart(pos, SnakePart.dirs[dir.value])]
 
 		for i in range(1, len):
-			self.grow()
+			self.grow(gd)
 
-	def grow(self) -> None:
+	def grow(self, gd) -> None:
 		last = self.__parts[-1]
 		newPos = np.add(last.getPosition(), np.negative(last.getDirection()))
 		newPart = SnakePart(newPos, last.getDirection())
 		
+		# Kinda hacky but too lazy to change everything
+		newPart.setPosition(newPos, gd)
 		self.__parts.append(newPart)
 
 	def shrink(self, n) -> None:
