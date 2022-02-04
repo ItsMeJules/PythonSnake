@@ -4,7 +4,9 @@ window:
 
 entity_size:
   snake_part: 30
+  apple: 8
 
 colors:
   snake: 224, 224, 224
+  apple: 255, 255, 0
   background: (185, 24, 100)

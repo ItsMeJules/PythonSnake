@@ -1,4 +1,5 @@
 from enum import Enum
+from socket import gethostbyaddr
 import numpy as np
 import pygame
 
@@ -23,7 +24,7 @@ class Direction(Enum):
 
 def display_snake(sk, screen):
 	for p in sk.getParts():
-		r = pygame.Rect(p.getPosition(True), (GRID_SQUARE_SIZE - 5, GRID_SQUARE_SIZE - 5))
+		r = pygame.Rect(p.getPosition(True), (SNAKE_PART_SIZE - 5, SNAKE_PART_SIZE - 5))
 		pygame.draw.rect(screen, SNAKE_COLOR, r)
 			
 class SnakePart:
@@ -53,18 +54,15 @@ class SnakePart:
 
 	def getPosition(self, pixels = False) -> np.ndarray:
 		if pixels:
-			return np.multiply(self.__pos, GRID_SQUARE_SIZE)
+			return np.multiply(self.__pos, SNAKE_PART_SIZE)
 		return self.__pos
 
-	def setDirection(self, direction) -> bool:
-		dir = SnakePart.dirs[direction.value]
-		if not (-self.__dir[0] != dir[0] and -self.__dir[1] != dir[1]): #opposed directions
-			return False
-		self.__dir = dir
+	def setDirection(self, direction) -> None:
+		self.__dir = SnakePart.dirs[direction.value]
 
 	def getDirection(self, pixels = False) -> np.ndarray:
 		if pixels:
-			return np.multiply(self.__dir, GRID_SQUARE_SIZE)
+			return np.multiply(self.__dir, SNAKE_PART_SIZE)
 		return self.__dir
 	
 	def __str__(self) -> str:
@@ -91,11 +89,20 @@ class Snake:
 		for i in range(len(self.__parts) - 1, 0, -1): #moves every part except head
 			self.__parts[i].move(self.__parts[i - 1].getDirection(), grd)
 
-		dir = SnakePart.dirs[self.newDir.value]
-		self.getHead().move(dir, grd)
+		self.getHead().move(SnakePart.dirs[self.newDir.value], grd)
+		return True
 
-	def dir(self, dir) -> None:
+	def dir(self, dir) -> bool:
+		dirMt = SnakePart.dirs[dir.value]
+		headDir = self.getHead().getDirection()
+		if -headDir[0] == dirMt[0] and -headDir[1] == dirMt[1]: #opposed directions
+			return False
+
 		self.newDir = dir
+		return True
+
+	def canEat(self, apl) -> bool:
+		return np.array_equal(np.add(self.getHead().getPosition(), 1), apl.pos)
 
 	def getHead(self) -> SnakePart:
 		return self.__parts[0]

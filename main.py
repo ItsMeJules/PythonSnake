@@ -3,11 +3,14 @@
 import sys
 import numpy
 import pygame
+import random
+from datetime import datetime
 
 # My imports
-from snake import Snake, Direction, display_snake
-from grid import Grid
+from snake import *
+from grid import *
 from globals import *
+from apple import *
 
 pygame.init()
 
@@ -15,6 +18,8 @@ def main():
 	gd = Grid(pygame.display.set_mode(SCREEN_SIZE, pygame.RESIZABLE))
 	sk = Snake(numpy.array([3, 3]), Direction.EAST, 4)
 	clock = pygame.time.Clock()
+	apl = Apple(gd)
+	random.seed(datetime.now())
 
 	pygame.display.set_caption("Snake.py")
 	gd.screen.fill(BG_COLOR)
@@ -35,11 +40,16 @@ def main():
 				elif event.key == pygame.K_ESCAPE:
 					pygame.quit()
 					sys.exit()
-		clock.tick(10)
 		sk.move(gd)
+		if sk.canEat(apl):
+			sk.grow()
+			clear_apple(apl, gd.screen)
+			apl.spawn(gd)
 		display_snake(sk, gd.screen)
+		display_apple(apl, gd.screen)
 		pygame.display.flip()
 		gd.clearLastPos(sk)
+		clock.tick(10)
 
 if __name__ == "__main__":
 	main()
